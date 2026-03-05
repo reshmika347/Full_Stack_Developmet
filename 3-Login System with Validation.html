@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login System</title>
+    <style>
+        body {
+            font-family: Arial;
+            background: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .login-box {
+            background: white;
+            padding: 30px;
+            width: 320px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            text-align: center;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #0056b3;
+        }
+
+        .error {
+            color: red;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="login-box">
+    <h2>Login</h2>
+
+    <form action="login.php" method="POST" onsubmit="return validateForm()">
+        <input type="text" id="email" name="email" placeholder="Enter Email">
+        <div id="emailError" class="error"></div>
+
+        <input type="password" id="password" name="password" placeholder="Enter Password">
+        <div id="passwordError" class="error"></div>
+
+        <button type="submit">Login</button>
+    </form>
+</div>
+
+<script>
+function validateForm() {
+    let email = document.getElementById("email").value;
+    let password = document.getElementById("password").value;
+    let valid = true;
+
+    document.getElementById("emailError").innerHTML = "";
+    document.getElementById("passwordError").innerHTML = "";
+
+    if (email === "") {
+        document.getElementById("emailError").innerHTML = "Email is required";
+        valid = false;
+    }
+
+    if (password === "") {
+        document.getElementById("passwordError").innerHTML = "Password is required";
+        valid = false;
+    }
+
+    return valid;
+}
+</script>
+
+</body>
+</html>
+
+// Create login.php
+<?php
+$conn = new mysqli("localhost", "root", "", "login_system");
+
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+$email = $_POST['email'];
+$password = $_POST['password'];
+
+$sql = "SELECT * FROM users WHERE email='$email' AND password='$password'";
+$result = $conn->query($sql);
+
+if ($result->num_rows > 0) {
+    echo "<h2 style='color:green;text-align:center;'>Login Successful!</h2>";
+} else {
+    echo "<h2 style='color:red;text-align:center;'>Invalid Credentials!</h2>";
+}
+
+$conn->close();
+?>
+
+Database Setup (Run in phpMyAdmin)
+CREATE DATABASE login_system;
+
+USE login_system;
+
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    email VARCHAR(100) NOT NULL,
+    password VARCHAR(255) NOT NULL
+);
+
+INSERT INTO users (email, password)
+VALUES ('admin@gmail.com', '123456');
