@@ -1,0 +1,5 @@
+edu\jfs\app\service\ProductService.class
+edu\jfs\app\repository\ProductRepository.class
+edu\jfs\app\entity\Product.class
+edu\jfs\app\Application.class
+edu\jfs\app\controller\ProductController.class
